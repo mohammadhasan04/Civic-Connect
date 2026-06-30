@@ -1,4 +1,6 @@
 'use client';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -17,7 +19,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
 
       const [compRes, userRes] = await Promise.all([

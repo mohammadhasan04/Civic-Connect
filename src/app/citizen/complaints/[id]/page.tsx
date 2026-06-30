@@ -1,4 +1,6 @@
 'use client';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
@@ -18,7 +20,7 @@ export default function ComplaintDetailPage() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
 
       const { data: comp } = await supabase

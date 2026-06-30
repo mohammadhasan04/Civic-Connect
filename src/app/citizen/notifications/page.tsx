@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Notification } from '@/lib/types';
@@ -13,7 +15,6 @@ export default function NotificationsPage() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
@@ -32,14 +33,12 @@ export default function NotificationsPage() {
   }, []);
 
   const markAsRead = async (id: string) => {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     await supabase.from('notifications').update({ read: true, read_at: new Date().toISOString() }).eq('id', id);
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
   };
 
   const markAllRead = async () => {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;

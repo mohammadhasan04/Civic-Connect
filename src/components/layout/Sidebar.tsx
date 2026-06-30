@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -73,7 +75,6 @@ export function Sidebar({ userRole, userName }: SidebarProps) {
 
   const handleLogout = async () => {
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       await supabase.auth.signOut();
     } catch {

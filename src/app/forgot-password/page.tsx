@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Building2, Mail, Loader2, ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react';
@@ -20,7 +22,6 @@ export default function ForgotPasswordPage() {
     if (!emailValidation.valid) { toast.error(emailValidation.error || 'Please enter a valid email address'); return; }
     setLoading(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
         redirectTo: `${window.location.origin}/login`,

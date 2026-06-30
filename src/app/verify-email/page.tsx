@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Loader2, RefreshCw, CheckCircle } from 'lucide-react';
@@ -17,7 +19,6 @@ function VerifyEmailContent() {
     if (!email) { toast.error('No email address found'); return; }
     setResending(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { error } = await supabase.auth.resend({ type: 'signup', email });
       if (error) {

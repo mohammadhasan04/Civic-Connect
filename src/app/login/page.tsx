@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -57,7 +59,6 @@ export default function LoginPage() {
         loginEmail = idMap[loginEmail];
       }
 
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
 
       const { data, error } = await supabase.auth.signInWithPassword({

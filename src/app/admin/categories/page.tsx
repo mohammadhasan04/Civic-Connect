@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Plus, Pencil, Clock, X, Tag } from 'lucide-react';
@@ -20,7 +22,6 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { data } = await supabase.from('categories').select('*').eq('is_active', true).order('sort_order');
       if (data) setCategories(data.map((c: Record<string, unknown>) => ({ id: c.id as string, slug: c.slug as string, name: (c.name_en as string) || '', color: (c.color as string) || '#333', sla_hours: (c.sla_hours as number) || 72, icon: (c.icon as string) || 'tag' })));

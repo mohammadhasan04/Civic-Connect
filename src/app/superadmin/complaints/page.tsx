@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { DashboardShell } from '@/components/layout/DashboardShell';
@@ -16,7 +18,6 @@ export default function SuperAdminComplaintsPage() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { data } = await supabase.from('complaints').select('*, category:categories(name_en), ward:wards(name)').order('created_at', { ascending: false }).limit(200);
       setComplaints((data || []) as unknown as Complaint[]);

@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Ward } from '@/lib/types';
@@ -17,7 +19,6 @@ export default function AdminWardsPage() {
   useEffect(() => {
     async function load() {
       try {
-        const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
         const supabase = createBrowserSupabaseClient();
         const { data } = await supabase.from('wards').select('*').order('ward_number');
         if (data) setWards(data);
@@ -34,7 +35,6 @@ export default function AdminWardsPage() {
     const phoneV = validatePhone(form.contact_phone);
     if (!phoneV.valid) { toast.error(phoneV.error!); return; }
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
 
       if (editing) {

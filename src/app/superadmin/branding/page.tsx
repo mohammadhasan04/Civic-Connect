@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Loader2, Save, Palette, Eye } from 'lucide-react';
@@ -12,7 +14,6 @@ export default function BrandingPage() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { data } = await supabase.from('system_settings').select('key, value');
       if (data) {
@@ -30,7 +31,6 @@ export default function BrandingPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { data: { user: _user } } = await supabase.auth.getUser();
 

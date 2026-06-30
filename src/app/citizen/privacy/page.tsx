@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { useAuth } from '@/lib/auth-context';
@@ -16,7 +18,6 @@ export default function CitizenPrivacyPage() {
   useEffect(() => { loadRequests(); }, []);
 
   async function loadRequests() {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     const { data: { user: authUser } } = await supabase.auth.getUser();
     if (!authUser) return;
@@ -32,7 +33,6 @@ export default function CitizenPrivacyPage() {
   }
 
   const respond = async (id: string, accept: boolean) => {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
 
     const updates: Record<string, unknown> = {

@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Profile } from '@/lib/types';
@@ -18,7 +20,6 @@ export default function TalukAdminsPage() {
   useEffect(() => { loadAdmins(); }, []);
 
   async function loadAdmins() {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     const { data } = await supabase.from('profiles').select('*').eq('role', 'taluk_admin').order('created_at', { ascending: false });
     setAdmins((data || []) as Profile[]);
@@ -26,7 +27,6 @@ export default function TalukAdminsPage() {
   }
 
   const toggleActive = async (id: string, current: boolean) => {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     const { error } = await supabase.from('profiles').update({ is_active: !current }).eq('id', id);
     if (error) { toast.error(error.message); return; }

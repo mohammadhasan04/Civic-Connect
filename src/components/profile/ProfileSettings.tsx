@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { User, Phone, Mail, Shield, Save, Loader2, Camera, AlertCircle, Check } from 'lucide-react';
 import { toast } from 'sonner';
@@ -23,7 +25,6 @@ export function ProfileSettings() {
   useEffect(() => {
     async function loadData() {
       try {
-        const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
         const supabase = createBrowserSupabaseClient();
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
@@ -61,7 +62,6 @@ export function ProfileSettings() {
     if (!phoneValidation.valid) { toast.error(phoneValidation.error!); return; }
     setSaving(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       
       const { error } = await supabase.from('profiles')

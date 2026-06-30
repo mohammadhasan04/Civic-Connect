@@ -1,8 +1,10 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
-import { Loader2, BarChart3, TrendingUp, Filter, Calendar } from 'lucide-react';
+import { Loader2, BarChart3, TrendingUp, Calendar } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   PieChart, Pie, Cell, BarChart, Bar, Legend
@@ -10,12 +12,18 @@ import {
 
 export default function AnalyticsDashboard() {
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<{
+    total: number;
+    resolved: number;
+    resolutionRate: number;
+    trendData: { name: string; total: number }[];
+    categoryData: { name: string; value: number }[];
+    statusData: { name: string; value: number; color: string }[];
+  } | null>(null);
 
   useEffect(() => {
     async function loadStats() {
       try {
-        const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
         const supabase = createBrowserSupabaseClient();
         
         // Fetch complaints
@@ -25,7 +33,7 @@ export default function AnalyticsDashboard() {
         
         // Process Status Breakdown
         const statusCounts = {
-          OPEN: 0, ASSIGNED: 0, IN_PROGRESS: 0, RESOLVED: 0, REJECTED: 0
+          NEW: 0, ASSIGNED: 0, IN_PROGRESS: 0, RESOLVED: 0, CLOSED: 0
         };
         
         // Process Trends
@@ -48,7 +56,7 @@ export default function AnalyticsDashboard() {
           // Categories
           let catName = 'Other';
           if (c.categories) {
-            catName = Array.isArray(c.categories) ? c.categories[0]?.name_en : (c.categories as any).name_en;
+            catName = Array.isArray(c.categories) ? c.categories[0]?.name_en : (c.categories as { name_en: string }).name_en;
           }
           catName = catName || 'Other';
           catMap[catName] = (catMap[catName] || 0) + 1;
@@ -58,10 +66,10 @@ export default function AnalyticsDashboard() {
         const categoryData = Object.keys(catMap).map(k => ({ name: k, value: catMap[k] }));
         
         const statusData = [
-          { name: 'Pending (Open/Assigned)', value: statusCounts.OPEN + statusCounts.ASSIGNED, color: '#f5a623' },
+          { name: 'Pending (New/Assigned)', value: statusCounts.NEW + statusCounts.ASSIGNED, color: '#f5a623' },
           { name: 'In Progress', value: statusCounts.IN_PROGRESS, color: '#3b82f6' },
           { name: 'Resolved', value: statusCounts.RESOLVED, color: '#22c55e' },
-          { name: 'Rejected', value: statusCounts.REJECTED, color: '#ef4444' }
+          { name: 'Closed', value: statusCounts.CLOSED, color: '#ef4444' }
         ];
 
         setStats({
@@ -177,7 +185,7 @@ export default function AnalyticsDashboard() {
                   />
                   <Bar dataKey="value" fill="var(--primary)" radius={[0, 4, 4, 0]} barSize={20}>
                     {
-                      stats.categoryData.map((entry: any, index: number) => (
+                      stats.categoryData.map((_entry: { name: string; value: number }, index: number) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))
                     }
@@ -203,7 +211,7 @@ export default function AnalyticsDashboard() {
                       dataKey="value"
                       stroke="none"
                     >
-                      {stats.statusData.map((entry: any, index: number) => (
+                      {stats.statusData.map((entry: { name: string; value: number; color: string }, index: number) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>

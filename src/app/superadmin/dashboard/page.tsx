@@ -1,4 +1,6 @@
 'use client';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
@@ -11,7 +13,7 @@ export default function SuperAdminDashboard() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
 
       const [usersRes, complaintsRes, adminsRes, resolvedRes, escalatedRes] = await Promise.all([

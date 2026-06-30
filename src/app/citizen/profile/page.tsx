@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useMemo, useCallback } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { useAuth } from '@/lib/auth-context';
@@ -30,7 +32,6 @@ export default function ProfilePage() {
 
     setSaving(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { error } = await supabase.from('profiles').update({
         full_name: name.trim(),

@@ -1,4 +1,6 @@
 'use client';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -37,7 +39,7 @@ export default function NewComplaintPage() {
 
   useEffect(() => {
     async function loadData() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
       const [catRes, wardRes] = await Promise.all([
         supabase.from('categories').select('*').eq('is_active', true).order('sort_order'),
@@ -111,7 +113,7 @@ export default function NewComplaintPage() {
     }
     setSubmitting(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
       const { data: { user: authUser } } = await supabase.auth.getUser();
       if (!authUser) { toast.error('Please log in'); return; }

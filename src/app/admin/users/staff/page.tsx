@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { useAuth } from '@/lib/auth-context';
@@ -22,7 +24,6 @@ export default function ManageStaffPage() {
   useEffect(() => { loadData(); }, []);
 
   async function loadData() {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     const [staffRes, wardRes, deptRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('role', 'dept_staff').order('created_at', { ascending: false }),
@@ -39,7 +40,6 @@ export default function ManageStaffPage() {
     if (!canToggleUserStatus(currentUser?.role || '', 'dept_staff')) {
       toast.error('Insufficient permissions'); return;
     }
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     await supabase.from('profiles').update({ is_active: !current }).eq('id', id);
     toast.success(`Staff ${current ? 'deactivated' : 'activated'}`);

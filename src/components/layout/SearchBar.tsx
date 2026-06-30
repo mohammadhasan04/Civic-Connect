@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useRef, useEffect } from 'react';
 import { Search, X, Loader2, Tag } from 'lucide-react';
 import { STATUS_CONFIG } from '@/lib/constants';
@@ -42,7 +44,6 @@ export function SearchBar() {
     const timer = setTimeout(async () => {
       setSearching(true);
       try {
-        const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
         const supabase = createBrowserSupabaseClient();
 
         const { data } = await supabase

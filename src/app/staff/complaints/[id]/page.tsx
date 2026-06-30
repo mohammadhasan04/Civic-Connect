@@ -1,4 +1,6 @@
 'use client';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
@@ -27,7 +29,7 @@ export default function StaffComplaintDetail() {
   }, [id]);
 
   async function loadData() {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
     const supabase = createBrowserSupabaseClient();
 
     const { data: comp } = await supabase
@@ -51,7 +53,7 @@ export default function StaffComplaintDetail() {
   const updateStatus = async (newStatus: string) => {
     setUpdating(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
       const { data: { user } } = await supabase.auth.getUser();
 

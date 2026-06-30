@@ -1,12 +1,14 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { Profile, UserRole, Ward, Department } from '@/lib/types';
 import { ROLE_LABELS } from '@/lib/constants';
-import { Plus, Search, Pencil, Shield, ToggleLeft, ToggleRight, X, Lock, Loader2, Users, Trash2, AlertCircle } from 'lucide-react';
+import { Plus, Search, Pencil, Shield, ToggleLeft, ToggleRight, X, Lock, Loader2, Users, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { cn, validatePhone, validateEmail, validateName } from '@/lib/utils';
+import { validatePhone, validateEmail, validateName } from '@/lib/utils';
 
 const roleColors: Record<string, string> = {
   citizen: 'bg-[rgba(59,130,246,0.1)] text-[var(--blue)] border-[rgba(59,130,246,0.2)]',
@@ -32,7 +34,6 @@ export default function AdminUsersPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
         const supabase = createBrowserSupabaseClient();
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
@@ -84,7 +85,6 @@ export default function AdminUsersPage() {
     }
     setSaving(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       if (editing) {
         const { error } = await supabase.from('profiles').update({ full_name: form.full_name, phone: phoneV.formatted || null, role: form.role, ward_id: form.ward_id || null, department_id: form.department_id || null, updated_at: new Date().toISOString() }).eq('id', editing.id);
@@ -106,7 +106,6 @@ export default function AdminUsersPage() {
   const toggleActive = async (user: Profile) => {
     if (!canModifyUser(user.role)) { toast.error('Action restricted by node clearance'); return; }
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { error } = await supabase.from('profiles').update({ is_active: !user.is_active }).eq('id', user.id);
       if (error) { toast.error(error.message); return; }

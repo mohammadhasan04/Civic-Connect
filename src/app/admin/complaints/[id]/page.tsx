@@ -1,4 +1,6 @@
 'use client';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
@@ -25,7 +27,7 @@ export default function AdminComplaintDetail() {
   useEffect(() => { loadData(); }, [id]);
 
   async function loadData() {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
     const supabase = createBrowserSupabaseClient();
     const { data: comp } = await supabase.from('complaints')
       .select('*, category:categories(name_en, color), ward:wards(name), department:departments(name)')
@@ -43,7 +45,7 @@ export default function AdminComplaintDetail() {
   const updateStatus = async (newStatus: string) => {
     setUpdating(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
       const { data: { user } } = await supabase.auth.getUser();
       const updates: Record<string, unknown> = { status: newStatus };

@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { useAuth } from '@/lib/auth-context';
@@ -30,7 +32,6 @@ export default function AdminInfoRequestsPage() {
   useEffect(() => { loadRequests(); }, []);
 
   async function loadRequests() {
-    const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
     const supabase = createBrowserSupabaseClient();
     const { data: { user: authUser } } = await supabase.auth.getUser();
     if (!authUser) return;
@@ -49,7 +50,6 @@ export default function AdminInfoRequestsPage() {
     if (!citizenEmail || !reason) { toast.error('Email and reason required'); return; }
     setSending(true);
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
       const { data: { user: authUser } } = await supabase.auth.getUser();
 

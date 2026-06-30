@@ -1,4 +1,6 @@
 'use client';
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -16,7 +18,7 @@ export default function SupervisorDashboard() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
+
       const supabase = createBrowserSupabaseClient();
       const { data: { user: authUser } } = await supabase.auth.getUser();
       if (!authUser) return;

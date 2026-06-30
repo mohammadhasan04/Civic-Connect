@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Building2, BarChart3, FileText, CheckCircle, Clock, Loader2 } from 'lucide-react';
@@ -17,7 +19,6 @@ export default function TransparencyPage() {
 
   useEffect(() => {
     async function load() {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
 
       const { count: total } = await supabase.from('complaints').select('*', { count: 'exact', head: true }).eq('is_public', true);

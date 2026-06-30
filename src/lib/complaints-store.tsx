@@ -1,5 +1,7 @@
 'use client';
 
+import { createBrowserSupabaseClient } from '@/lib/supabase/client';
+
 import { createContext, useContext, useReducer, useCallback, ReactNode, useEffect } from 'react';
 import { Complaint, ComplaintStatus } from '@/lib/types';
 
@@ -67,7 +69,6 @@ export function ComplaintsProvider({ children }: { children: ReactNode }) {
   const fetchComplaints = useCallback(async (citizenId?: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const { createBrowserSupabaseClient } = await import('@/lib/supabase/client');
       const supabase = createBrowserSupabaseClient();
 
       let query = supabase

@@ -265,8 +265,8 @@ export function validateName(name: string): { valid: boolean; error: string | nu
   if (trimmed.length > 100) {
     return { valid: false, error: 'Name must be less than 100 characters' };
   }
-  // Allow Unicode letters, spaces, dots, hyphens, apostrophes
-  if (!/^[\p{L}\s.'-]+$/u.test(trimmed)) {
+  // Allow letters (Latin + extended Unicode), spaces, dots, hyphens, apostrophes
+  if (!/^[a-zA-Z\u00C0-\u024F\u0900-\u097F\u0C80-\u0CFF\s.'-]+$/.test(trimmed)) {
     return { valid: false, error: 'Name can only contain letters, spaces, dots, hyphens, and apostrophes' };
   }
   return { valid: true, error: null };
